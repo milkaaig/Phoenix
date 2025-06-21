@@ -33,8 +33,7 @@ namespace Phoenix.Models
                 entity.Property(e => e.Author)
                       .HasMaxLength(100);
 
-                entity.Property(e => e.Content)
-                      .IsRequired();
+              
 
                 // Configure date as required
                 entity.Property(e => e.date)

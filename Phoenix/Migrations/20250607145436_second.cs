@@ -3,7 +3,8 @@
 #nullable disable
 
 namespace Phoenix.Migrations
-{
+{   
+    //checker  : Migration done, SQLite showing
     /// <inheritdoc />
     public partial class second : Migration
     {
