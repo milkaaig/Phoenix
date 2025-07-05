@@ -61,3 +61,11 @@ body {
     min-height: 6em;
     max-height: 7.5em;
 }
+
+/* Add vertical space between table rows for AllPosts */
+.custom-table-spacing tbody tr {
+    border-bottom: 16px solid transparent;
+}
+.custom-table-spacing tbody tr:last-child {
+    border-bottom: none;
+}

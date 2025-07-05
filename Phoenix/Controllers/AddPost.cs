@@ -3,10 +3,13 @@ using Microsoft.Extensions.Logging;
 using Phoenix.Data;
 using Phoenix.Models;
 using Microsoft.EntityFrameworkCore;
+using Phoenix.Interfaces;
+
 
 namespace Phoenix.Controllers
+
 {
-    public class AddPost : Controller
+    public  class AddPost : Controller 
     {
         private readonly AppDbContext _context;
         private readonly ILogger<AddPost> _logger;
@@ -61,6 +64,15 @@ namespace Phoenix.Controllers
         [HttpGet]
         public IActionResult GetPosts()
         {
+
+            _logger.LogInformation("GetPosts action called.");
+            // Fetch all posts from the database
+            _logger.LogInformation("Fetching all posts from the database.");
+            if (_context.Posts == null)
+            {
+                _logger.LogWarning("No posts found in the database.");
+                return View(new List<Post>());
+            }
             var posts = _context.Posts.ToList();
             return View(posts);
         }

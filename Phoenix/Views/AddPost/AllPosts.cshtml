@@ -46,18 +46,9 @@
     </div>
     @if (hasPosts)
     {
-        <form asp-action="DeleteAll" asp-controller="AddPost" method="post" onsubmit="return confirm('Delete ALL posts?');">
+        <form asp-action="DeleteAll" asp-controller="AddPost" method="post" onsubmit="return confirm('Delete ALL posts?');" class="mb-5">
             <button type="submit" class="btn btn-outline-danger mt-3">Delete All Posts</button>
         </form>
     }
 </div>
 
-<style>
-    /* Add vertical space between table rows */
-    .custom-table-spacing tbody tr {
-        border-bottom: 16px solid transparent;
-    }
-    .custom-table-spacing tbody tr:last-child {
-        border-bottom: none;
-    }
-</style>

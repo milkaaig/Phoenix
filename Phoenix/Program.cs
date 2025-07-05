@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Phoenix.Models;
+using Phoenix.Interfaces;
+using Phoenix.Controllers;
+using Phoenix.Services;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +20,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IAddFunctions, AddPost>();
 
 var app = builder.Build();
 
