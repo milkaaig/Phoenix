@@ -1,33 +1,87 @@
-﻿@model Phoenix.Data.Post;
+﻿@model IEnumerable<Phoenix.Data.Post>
 @using Phoenix.Data
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>mdo</td>
-        </tr>
-        <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>fat</td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>twitter</td>
-        </tr>
-    </tbody>
-</table>
+@{
+    ViewData["Title"] = "Posts";
+    var postsList = Model?.ToList() ?? new List<Phoenix.Data.Post>();
+    int descLimit = 100; // Character limit for description preview
+    Func<string, int, string> Truncate = (desc, limit) =>
+        string.IsNullOrEmpty(desc) ? "" : (desc.Length > limit ? desc.Substring(0, limit) + "..." : desc);
+}
+
+<div class="container mt-4">
+    <!-- Search Box -->
+    <div class="row mb-4">
+        <div class="col-md-6 mx-auto">
+            <input id="searchBox" type="text" class="form-control" placeholder="Search posts by title, category, or author..." />
+        </div>
+    </div>
+
+    <!-- Carousel -->
+    @if (postsList.Any())
+    {
+        <div class="w-100 d-flex justify-content-center mb-5">
+            <div id="postsCarousel" class="carousel slide" data-bs-ride="carousel" style="width:52rem;">
+                <div class="carousel-inner">
+                    @for (int i = 0; i < postsList.Count; i++)
+                    {
+                        var post = postsList[i];
+                        <div class="carousel-item @(i == 0 ? "active" : "") post-carousel-item"
+                             data-title="@post.Title"
+                             data-category="@post.Category"
+                             data-author="@post.Author">
+                            <a asp-controller="AddPost" asp-action="Post" asp-route-id="@post.Id" class="text-decoration-none text-dark">
+                                <div class="card carousel-card">
+                                    <div class="card-body carousel-card-body">
+                                        <h4 class="card-title">@post.Title</h4>
+                                        <h6 class="card-subtitle mb-2 text-muted">
+                                            @post.Category &bull; @post.date.ToString("yyyy-MM-dd")
+                                        </h6>
+                                        <p class="card-text carousel-desc-preview">@post.Description</p>
+                                        <footer class="blockquote-footer mt-3">By @post.Author</footer>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#postsCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#postsCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">No posts available.</div>
+    }
+
+    <!-- Cards Grid -->
+    <div class="row" id="postsCards">
+        @foreach (var post in postsList)
+        {
+            <div class="col-md-4 mb-4 post-card"
+                 data-title="@post.Title"
+                 data-category="@post.Category"
+                 data-author="@post.Author">
+                <a asp-controller="AddPost" asp-action="Post" asp-route-id="@post.Id" class="text-decoration-none text-dark">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">@post.Title</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                @post.Category &bull; @post.date.ToString("yyyy-MM-dd")
+                            </h6>
+                            <div class="desc-preview">
+                                @Truncate(post.Description, descLimit)
+                            </div>
+                            <footer class="blockquote-footer mt-3">By @post.Author</footer>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>

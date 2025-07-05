@@ -1,11 +1,12 @@
-﻿namespace Phoenix.Data
+﻿
+namespace Phoenix.Data
 {
     public class Author
     {
         public int Id { get; set; }
-        public string Name { get; set; } = null!;
+        public string Name { get; set; }
        
         public int PostId { get; set; }
-        public Post Post { get; set; } = null!;
+        public Post Post { get; set; }
     }
 }

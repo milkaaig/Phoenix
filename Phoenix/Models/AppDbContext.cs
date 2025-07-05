@@ -11,8 +11,8 @@ namespace Phoenix.Models
         }
 
         // DbSet for Posts table
-        public DbSet<Post> Posts { get; set; } = null!;
-        public DbSet<Author> Authors { get; set; } = null!;
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<Author> Authors { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,8 +32,6 @@ namespace Phoenix.Models
 
                 entity.Property(e => e.Author)
                       .HasMaxLength(100);
-
-              
 
                 // Configure date as required
                 entity.Property(e => e.date)
