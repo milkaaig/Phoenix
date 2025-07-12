@@ -1,13 +1,3 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
@@ -15,21 +5,32 @@ html {
 html {
   position: relative;
   min-height: 100%;
+  font-size: 16px;
 }
 
-body {
-  margin-bottom: 60px;
+
+
+.container {
+    margin-bottom: 5rem;
+}
+.carousel {
+    position: relative;
+    min-height: 24rem;
+    width: 56rem;      /* total width including space for arrows */
+
 }
 
-/* Carousel card custom size */
+/* Carousel card custom size - reduced width for more space */
 .carousel-card {
-    width: 50rem;
-    min-width: 50rem;
+    width: 40rem;      /* reduced from 50rem to 40rem */
+    min-width: 40rem;
     max-width: 100%;
     height: 24rem;
     min-height: 24rem;
     max-height: 24rem;
     margin: 0 auto;
+    position: relative;
+ 
 }
 
 .carousel-card-body {
@@ -69,3 +70,49 @@ body {
 .custom-table-spacing tbody tr:last-child {
     border-bottom: none;
 }
+
+
+
+/* Make carousel next/prev icons greyish, arrow only */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: transparent !important;
+    background-image: none !important;
+    mask-size: 100% 100%;
+    -webkit-mask-size: 100% 100%;
+    width: 2rem;
+    height: 2rem;
+}
+
+/* Custom left arrow */
+.carousel-control-prev-icon {
+    mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='grey' viewBox='0 0 16 16'><path d='M11.354 1.646a.5.5 0 0 1 0 .708L6.707 8l4.647 5.646a.5.5 0 0 1-.708.708l-5-6a.5.5 0 0 1 0-.708l5-6a.5.5 0 0 1 .708 0z'/></svg>");
+    -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='grey' viewBox='0 0 16 16'><path d='M11.354 1.646a.5.5 0 0 1 0 .708L6.707 8l4.647 5.646a.5.5 0 0 1-.708.708l-5-6a.5.5 0 0 1 0-.708l5-6a.5.5 0 0 1 .708 0z'/></svg>");
+    background-color: grey !important;
+}
+
+/* Custom right arrow */
+.carousel-control-next-icon {
+    mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='grey' viewBox='0 0 16 16'><path d='M4.646 1.646a.5.5 0 0 1 .708 0l5 6a.5.5 0 0 1 0 .708l-5 6a.5.5 0 0 1-.708-.708L9.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/></svg>");
+    -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='grey' viewBox='0 0 16 16'><path d='M4.646 1.646a.5.5 0 0 1 .708 0l5 6a.5.5 0 0 1 0 .708l-5 6a.5.5 0 0 1-.708-.708L9.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/></svg>");
+    background-color: grey !important;
+}
+
+.footer-gap {
+    margin-top: 2rem; /* Always a gap above the footer */
+}
+
+footer.footer-gap {
+    pointer-events: none; /* Makes the footer untouchable */
+}
+
+footer.footer-gap * {
+    pointer-events: auto; /* Allow links/buttons inside the footer to be clickable */
+}
+
+
+
+
+
+
+

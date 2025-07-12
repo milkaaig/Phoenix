@@ -62,18 +62,56 @@ namespace Phoenix.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetPosts()
+        public IActionResult GetPosts(string search, string category, string sort, int page = 1)
         {
+            const int pageSize = 15;
+            var postsQuery = _context.Posts.AsQueryable();
 
-            _logger.LogInformation("GetPosts action called.");
-            // Fetch all posts from the database
-            _logger.LogInformation("Fetching all posts from the database.");
-            if (_context.Posts == null)
+            if (!string.IsNullOrWhiteSpace(search))
             {
-                _logger.LogWarning("No posts found in the database.");
-                return View(new List<Post>());
+                string lowered = search.ToLower();
+                postsQuery = postsQuery.Where(p =>
+                    p.Title.ToLower().Contains(lowered) ||
+                    p.Category.ToLower().Contains(lowered) ||
+                    p.Author.ToLower().Contains(lowered)
+                );
             }
-            var posts = _context.Posts.ToList();
+
+            if (!string.IsNullOrWhiteSpace(category))
+            {
+                postsQuery = postsQuery.Where(p => p.Category == category);
+            }
+
+            // Sorting
+            if (sort == "latest")
+            {
+                postsQuery = postsQuery.OrderByDescending(p => p.date);
+            }
+            else if (sort == "oldest")
+            {
+                postsQuery = postsQuery.OrderBy(p => p.date);
+            }
+            else
+            {
+                postsQuery = postsQuery.OrderByDescending(p => p.date); // Default: latest
+            }
+
+            ViewBag.Categories = _context.Posts.Select(p => p.Category).Distinct().ToList() ?? new List<string>();
+
+            // Pagination logic
+            int totalPosts = postsQuery.Count();
+            int totalPages = (int)Math.Ceiling(totalPosts / (double)pageSize);
+
+            // Only limit to 15 posts if no filter/sort/search is applied
+            bool isInitialLoad = string.IsNullOrWhiteSpace(search) && string.IsNullOrWhiteSpace(category) && string.IsNullOrWhiteSpace(sort);
+            var posts = isInitialLoad
+                ? postsQuery.Take(pageSize).ToList()
+                : postsQuery.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.IsInitialLoad = isInitialLoad;
+
             return View(posts);
         }
 

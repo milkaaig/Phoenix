@@ -7,21 +7,32 @@
     int descLimit = 100; // Character limit for description preview
     Func<string, int, string> Truncate = (desc, limit) =>
         string.IsNullOrEmpty(desc) ? "" : (desc.Length > limit ? desc.Substring(0, limit) + "..." : desc);
+
+    var currentPage = ViewBag.CurrentPage as int? ?? 1;
+    var totalPages = ViewBag.TotalPages as int? ?? 1;
+    var isInitialLoad = ViewBag.IsInitialLoad as bool? ?? true;
+    var search = Context.Request.Query["search"];
+    var category = Context.Request.Query["category"];
+    var sort = Context.Request.Query["sort"];
 }
 
 <div class="container mt-4">
     <!-- Search Box -->
-    <div class="row mb-4">
-        <div class="col-md-6 mx-auto">
-            <input id="searchBox" type="text" class="form-control" placeholder="Search posts by title, category, or author..." />
+    <form method="get" asp-controller="AddPost" asp-action="GetPosts" class="mb-4">
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <input id="searchBox" name="search" type="text" class="form-control" 
+                       placeholder="Search posts by title, category, or author..." 
+                       value="@(ViewContext.HttpContext.Request.Query["search"])" />
+            </div>
         </div>
-    </div>
+    </form>
 
     <!-- Carousel -->
     @if (postsList.Any())
     {
         <div class="w-100 d-flex justify-content-center mb-5">
-            <div id="postsCarousel" class="carousel slide" data-bs-ride="carousel" style="width:52rem;">
+            <div id="postsCarousel" class="carousel slide" data-bs-ride="carousel" >
                 <div class="carousel-inner">
                     @for (int i = 0; i < postsList.Count; i++)
                     {
@@ -59,6 +70,32 @@
         <div class="alert alert-info">No posts available.</div>
     }
 
+    <!-- Filter and Sort  -->
+    <form method="get" asp-controller="AddPost" asp-action="GetPosts" class="mb-4">
+        <div class="row g-2 align-items-end">
+            <div class="col-md-4">
+                <label for="category" class="form-label">Category</label>
+                <select id="category" name="category" class="form-select" onchange="this.form.submit()">
+                    <option value="">All</option>
+                    @foreach (var cat in (List<string>)ViewBag.Categories)
+                    {
+                        <option value="@cat" selected="@(ViewContext.HttpContext.Request.Query["category"] == cat)">@cat</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="sort" class="form-label">Sort By</label>
+                <select id="sort" name="sort" class="form-select" onchange="this.form.submit()">
+                    <option value="latest" selected ="@(ViewContext.HttpContext.Request.Query["sort"] == "latest")  ">Latest</option>
+                    <option value="oldest" selected="@(ViewContext.HttpContext.Request.Query["sort"] == "oldest")">Oldest</option>
+                </select>
+            </div>
+        </div>
+    </form>
+
+
+
+
     <!-- Cards Grid -->
     <div class="row" id="postsCards">
         @foreach (var post in postsList)
@@ -84,4 +121,28 @@
             </div>
         }
     </div>
+
+    @if (!isInitialLoad && totalPages > 1)
+    {
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center mt-4  ">
+                <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                    <a class="page-link"
+                       href="@Url.Action("GetPosts", new { search = search, category = category, sort = sort, page = currentPage - 1 })"
+                       tabindex="-1">Previous</a>
+                </li>
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    <li class="page-item @(i == currentPage ? "active" : "")">
+                        <a class="page-link"
+                           href="@Url.Action("GetPosts", new { search = search, category = category, sort = sort, page = i })">@i</a>
+                    </li>
+                }
+                <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                    <a class="page-link"
+                       href="@Url.Action("GetPosts", new { search = search, category = category, sort = sort, page = currentPage + 1 })">Next</a>
+                </li>
+            </ul>
+        </nav>
+    }
 </div>

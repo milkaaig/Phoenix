@@ -20,7 +20,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<IAddFunctions, AddPost>();
+//builder.Services.AddScoped<IAddFunctions, AddFunctions>();
 
 var app = builder.Build();
 
