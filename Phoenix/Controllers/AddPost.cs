@@ -4,32 +4,40 @@ using Phoenix.Data;
 using Phoenix.Models;
 using Microsoft.EntityFrameworkCore;
 using Phoenix.Interfaces;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.IO;
+using System.Text;
 
 
 namespace Phoenix.Controllers
 
 {
-    public  class AddPost : Controller 
+
+    public class AddPost : Controller 
     {
         private readonly AppDbContext _context;
         private readonly ILogger<AddPost> _logger;
 
+        
         public AddPost(AppDbContext context, ILogger<AddPost> logger)
         {
             _context = context;
             _logger = logger;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
-            _logger.LogInformation("Index page visited.");
+            _logger.LogWarning("Index page");
             return View();
         }
 
         public IActionResult Posting()
         {
+            _logger.LogWarning("post submitted.");
             return View();
         }
+
 
         public IActionResult AddPosts()
         {
@@ -39,11 +47,17 @@ namespace Phoenix.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult SubmitPost(Post post)
+
         {
+
+
             if (!ModelState.IsValid)
             {
-                // Return the form with validation errors
+                _logger.LogError("Model state is invalid in SubmitPost action.");
+
                 return View("AddPosts", post);
+
+
             }
 
             _context.Add(post);
@@ -58,10 +72,11 @@ namespace Phoenix.Controllers
             _context.Authors.Add(author);
             _context.SaveChanges();
 
+           
+
             return View("Posting");
         }
 
-        [HttpGet]
         public IActionResult GetPosts(string search, string category, string sort, int page = 1)
         {
             const int pageSize = 15;
@@ -69,6 +84,8 @@ namespace Phoenix.Controllers
 
             if (!string.IsNullOrWhiteSpace(search))
             {
+                _logger.LogWarning("search.");
+
                 string lowered = search.ToLower();
                 postsQuery = postsQuery.Where(p =>
                     p.Title.ToLower().Contains(lowered) ||
@@ -136,7 +153,9 @@ namespace Phoenix.Controllers
         }
 
         public IActionResult AllPosts()
+
         {
+
             var posts = _context.Posts.ToList();
             ViewBag.HasPosts = posts.Any();
             return View(posts);
@@ -172,6 +191,43 @@ namespace Phoenix.Controllers
             }
             return View(post);
         }
+
+        [HttpGet]
+        public IActionResult ExportPosts()
+        {
+
+            _logger.LogWarning("export has been clicked");
+            var posts = _context.Posts.ToList();
+            var filePath = Path.Combine("Exports", $"posts-{DateTime.Now:yyyyMMddHHmmss}.csv");
+
+            Directory.CreateDirectory("Exports");
+            using (var writer = new StreamWriter(filePath, false, Encoding.UTF8))
+            {
+                writer.WriteLine("Id,Title,Description,Date,Category,Author");
+                foreach (var post in posts)
+                {
+                    writer.WriteLine($"{post.Id},\"{post.Title}\",\"{post.Description}\",{post.date:yyyy-MM-dd},{post.Category},{post.Author}");
+                }
+            }
+
+            var fileBytes = System.IO.File.ReadAllBytes(filePath);
+            return File(fileBytes, "text/csv", Path.GetFileName(filePath));
+        }
+    }
+
+    public class AddPostsModel : PageModel
+    {
+        private readonly ILogger<AddPostsModel> _logger;
+
+        public AddPostsModel(ILogger<AddPostsModel> logger)
+        {
+            _logger = logger;
+        }
+
+        public void OnGet()
+        {
+            _logger.LogWarning("This is a test warning from Serilog");
+            }
     }
 }
 

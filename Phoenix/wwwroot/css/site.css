@@ -1,79 +1,173 @@
+/* Light theme (default) */
+:root {
+    --primary-bg: #ffffff;
+    --secondary-bg: #f8f9fa;
+    --primary-text: #212529;
+    --secondary-text: #495057;
+    --link-color: #0d6efd;
+    --border-color: #dee2e6;
+    --card-bg: #ffffff;
+    --navbar-bg: #f8f9fa;
+}
+
+/* Dark theme */
+html[data-theme="dark"] {
+    --primary-bg: #212529;
+    --secondary-bg: #343a40;
+    --primary-text: #f8f9fa;
+    --secondary-text: #e9ecef;
+    --link-color: #6ea8fe;
+    --border-color: #495057;
+    --card-bg: #2c3034;
+    --navbar-bg: #343a40;
+}
+
+/* Apply theme variables */
+body {
+/*    background-color: var(--primary-bg);*/
+    color: var(--primary-text);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar, body, mainBody {
+    background-color: var(--navbar-bg) !important;
+}
+
+.card {
+    background-color: var(--card-bg);
+    color: var(--primary-text);
+    border-color: var(--border-color);
+}
+
+a {
+    color: var(--link-color);
+}
+
+.text-muted {
+    color: var(--secondary-text) !important;
+}
+
+.footer, .footer-gap {
+    background-color: var(--secondary-bg);
+    color: var(--secondary-text);
+}
+
+.modal {
+    background-color: var(--card-bg);
+    color: var(--primary-text);
+}
+
+.table th, .table td {
+    background-color: var(--secondary-bg);
+    color: var(--primary-text);
+}
+
+/* Theme toggle switch styling */
+.theme-toggle {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 3rem; /* Larger for better usability */
+    height: 1.5rem;
+    z-index: 1000; /* Ensure it’s above navbar */
+}
+
+.theme-toggle-input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.theme-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--secondary-text);
+    transition: background-color 0.4s ease;
+    border-radius: 1.5rem;
+}
+
+.theme-slider:before {
+    position: absolute;
+    content: "";
+    height: 1.2rem;
+    width: 1.2rem;
+    left: 0.15rem;
+    bottom: 0.15rem;
+    background-color: var(--primary-bg);
+    transition: transform 0.4s ease;
+    border-radius: 50%;
+}
+
+.theme-toggle-input:checked + .theme-slider {
+    background-color: var(--link-color);
+}
+
+    .theme-toggle-input:checked + .theme-slider:before {
+        transform: translateX(1.5rem);
+    }
+
+/* Fix navbar link colors for both themes */
+.navbar-light .navbar-nav .nav-link, body, mainBody {
+    color: var(--primary-text) !important;
+}
+
+/* Ensure navbar toggler icon is visible in both themes */
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='var(--primary-text)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Existing site.css content */
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem var(--primary-bg), 0 0 0 0.25rem var(--link-color);
 }
 
 html {
-  position: relative;
-  min-height: 100%;
-  font-size: 16px;
+    position: relative;
+    min-height: 100%;
+    font-size: 16px;
 }
 
-
-
-.container {
-    margin-bottom: 5rem;
-}
 .carousel {
     position: relative;
     min-height: 24rem;
-    width: 56rem;      /* total width including space for arrows */
-
+    width: 56rem;
 }
 
-/* Carousel card custom size - reduced width for more space */
 .carousel-card {
-    width: 40rem;      /* reduced from 50rem to 40rem */
-    min-width: 40rem;
-    max-width: 100%;
+    display: flex;
+    flex-direction: column;
     height: 24rem;
     min-height: 24rem;
     max-height: 24rem;
+    width: 40rem;
+    min-width: 40rem;
+    max-width: 100%;
     margin: 0 auto;
     position: relative;
- 
+    
 }
 
-.carousel-card-body {
-    height: 18rem;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+.carousel-img {
+    width: 100%;
+    aspect-ratio: 16/6; /* or 16/9, 3/1, etc. to match your design */
+    object-fit: contain; /* Show the whole image, may add letterboxing */
+    background: #eee;    /* Optional: background for letterbox area */
+    display: block;
+    max-height: 100%;
 }
 
-/* Card description preview: limit to 2 lines with ellipsis */
-.desc-preview {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    min-height: 2.5em;
-    max-height: 3.2em;
-}
-
-/* Limit carousel description to 5 lines with ellipsis */
-.carousel-desc-preview {
-    display: -webkit-box;
-    -webkit-line-clamp: 5;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    min-height: 6em;
-    max-height: 7.5em;
-}
-
-/* Add vertical space between table rows for AllPosts */
 .custom-table-spacing tbody tr {
     border-bottom: 16px solid transparent;
 }
-.custom-table-spacing tbody tr:last-child {
-    border-bottom: none;
-}
 
+    .custom-table-spacing tbody tr:last-child {
+        border-bottom: none;
+    }
 
-
-/* Make carousel next/prev icons greyish, arrow only */
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
     background-color: transparent !important;
@@ -84,35 +178,18 @@ html {
     height: 2rem;
 }
 
-/* Custom left arrow */
 .carousel-control-prev-icon {
     mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='grey' viewBox='0 0 16 16'><path d='M11.354 1.646a.5.5 0 0 1 0 .708L6.707 8l4.647 5.646a.5.5 0 0 1-.708.708l-5-6a.5.5 0 0 1 0-.708l5-6a.5.5 0 0 1 .708 0z'/></svg>");
     -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='grey' viewBox='0 0 16 16'><path d='M11.354 1.646a.5.5 0 0 1 0 .708L6.707 8l4.647 5.646a.5.5 0 0 1-.708.708l-5-6a.5.5 0 0 1 0-.708l5-6a.5.5 0 0 1 .708 0z'/></svg>");
     background-color: grey !important;
 }
 
-/* Custom right arrow */
 .carousel-control-next-icon {
     mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='grey' viewBox='0 0 16 16'><path d='M4.646 1.646a.5.5 0 0 1 .708 0l5 6a.5.5 0 0 1 0 .708l-5 6a.5.5 0 0 1-.708-.708L9.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/></svg>");
     -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='grey' viewBox='0 0 16 16'><path d='M4.646 1.646a.5.5 0 0 1 .708 0l5 6a.5.5 0 0 1 0 .708l-5 6a.5.5 0 0 1-.708-.708L9.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/></svg>");
     background-color: grey !important;
 }
 
-.footer-gap {
-    margin-top: 2rem; /* Always a gap above the footer */
+.mainBody {
+    margin-bottom: 5rem;
 }
-
-footer.footer-gap {
-    pointer-events: none; /* Makes the footer untouchable */
-}
-
-footer.footer-gap * {
-    pointer-events: auto; /* Allow links/buttons inside the footer to be clickable */
-}
-
-
-
-
-
-
-

@@ -43,12 +43,16 @@
                              data-author="@post.Author">
                             <a asp-controller="AddPost" asp-action="Post" asp-route-id="@post.Id" class="text-decoration-none text-dark">
                                 <div class="card carousel-card">
+                                    <img class="carousel-img card-img-top"
+                                         data-title="@post.Title"
+                                         data-category="@post.Category"
+                                         alt="Post image" />
                                     <div class="card-body carousel-card-body">
                                         <h4 class="card-title">@post.Title</h4>
                                         <h6 class="card-subtitle mb-2 text-muted">
                                             @post.Category &bull; @post.date.ToString("yyyy-MM-dd")
                                         </h6>
-                                        <p class="card-text carousel-desc-preview">@post.Description</p>
+                                        @* <p class="card-text carousel-desc-preview">@post.Description</p> *@
                                         <footer class="blockquote-footer mt-3">By @post.Author</footer>
                                     </div>
                                 </div>
@@ -92,9 +96,6 @@
             </div>
         </div>
     </form>
-
-
-
 
     <!-- Cards Grid -->
     <div class="row" id="postsCards">
@@ -145,4 +146,7 @@
             </ul>
         </nav>
     }
+
+    <a href="/AddPost/ExportPosts" class="btn btn-outline-success">Export Posts as CSV</a>
 </div>
+
