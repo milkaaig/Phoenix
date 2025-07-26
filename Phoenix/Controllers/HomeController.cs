@@ -18,7 +18,7 @@ namespace Phoenix.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Post()
         {
             return View();
         }

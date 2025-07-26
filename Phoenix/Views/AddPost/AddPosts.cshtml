@@ -1,0 +1,81 @@
+﻿@model Phoenix.Data.Post;  
+@using Phoenix.Data  
+@using Microsoft.Extensions.Logging
+
+@*  Post data will be prompted and tied with Data.Post *@  
+
+@{  
+    ViewData["Title"] = "Create Post";  
+    Layout = "~/Views/Shared/_Layout.cshtml";  
+    var category = new List<String> { "Technology", "Business", "Health" };  
+}  
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+
+<div class="container mt-4">  
+
+    <h2>Create Post</h2>  
+
+    <form asp-controller="AddPost" asp-action="SubmitPost" method="post">  
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>  
+        
+        <div class="form-group mb-3">  
+            <label asp-for="Title" class="control-label"></label>  
+            <input asp-for="Title" class="form-control" type="text" placeholder="Enter Post title" />  
+            <span asp-validation-for="Title" class="text-danger"></span>  
+        </div>  
+        <div class="form-group mb-3">
+            <label asp-for="Description" class="control-label"></label>  
+            <textarea asp-for="Description" class="form-control" placeholder="Enter your description " rows = "8" cols="60" ></textarea>  
+            <span asp-validation-for="Description" class="text-danger"></span>  
+        </div>  
+
+        <div class="form-group mb-3  ">
+            <label asp-for="date" class="control-label">Date</label>  
+            <input asp-for="date" type="date" class="form-control" />
+            <span asp-validation-for="date" class="text-danger"></span>  
+        </div>  
+
+        
+
+        <div class="form-group mb-3">
+            <label asp-for="Category" class="control-label"></label>  
+            <select asp-for="Category" class="form-control">  
+                @foreach (var cat in category)  
+                {  
+                    <option value="@cat">@cat</option>  
+                }  
+            </select>  
+            <span asp-validation-for="Category" class="text-danger"></span>  
+        </div>  
+
+        <div class="form-group mb-3">
+            <label asp-for="Author" class="control-label"></label>
+            <input asp-for="Author" class="form-control" type="text" placeholder="Enter your name" />
+
+            <span asp-validation-for="Author" class="text-danger"></span>  
+        </div>  
+
+      
+
+        <div class="form-group mb-5">   
+            <input type="submit" value="Submit" asp-controller="AddPost" asp-action="SubmitPost" method="post" class="btn btn-primary" />
+
+        </div>
+        
+        @* <div class="form-group">  
+            <a asp-controller="AddPost" asp-action="Delete"  asp-route-id="@Model.Id" class="btn btn-secondary">Delete</a>
+        </div> *@
+
+
+    </form>  
+
+</div>  
+
+
+
+
+

@@ -1,0 +1,25 @@
+﻿@model Phoenix.Data.Post
+
+@{
+    ViewData["Title"] = "Post Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+  @* View Post in the browser *@
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="card-title">@Model.Title</h3>
+            <h6 class="card-subtitle mb-2 text-muted">
+                @Model.Category &bull; @Model.date.ToString("yyyy-MM-dd")
+            </h6>
+            <p class="card-text mt-3">@Model.Description</p>
+            <footer class="blockquote-footer mt-4">By @Model.Author</footer>
+            <div class="mt-4">
+                <a asp-controller="AddPost" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-secondary btn-sm">
+                    Edit
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
